@@ -1,32 +1,92 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# The Flask Framework 
+ 
+Flask is a small framework.
 
-Welcome,
+pip3 install Flask
 
-This is the Code Institute student template for deploying your third portfolio project, the Python command-line project. The last update to this file was: **March 14, 2023**
+### Creating Flask App 
 
-## Reminders
+import os
+from flask import Flask
 
-- Your code must be placed in the `run.py` file
-- Your dependencies must be placed in the `requirements.txt` file
-- Do not edit any of the other files or your code may not deploy properly
 
-## Creating the Heroku app
+app = Flask(__name__)
 
-When you create the app, you will need to add two buildpacks from the _Settings_ tab. The ordering is as follows:
 
-1. `heroku/python`
-2. `heroku/nodejs`
+@app.route("/")
+def index():
+    return "Hello, World"
 
-You must then create a _Config Var_ called `PORT`. Set this to `8000`
 
-If you have credentials, such as in the Love Sandwiches project, you must create another _Config Var_ called `CREDS` and paste the JSON into the value field.
+if __name__ == "__main__":
+    app.run(
+        host=os.environ.get("IP", "0.0.0.0"),
+        port=int(os.environ.get("PORT", "5000")),
+        debug=True)
 
-Connect your GitHub repository and deploy as normal.
+### Returning HTML code from a Flask function
 
-## Constraints
+import render_template
+return render_template("index.html")
 
-The deployment terminal is set to 80 columns by 24 rows. That means that each line of text needs to be 80 characters or less otherwise it will be wrapped onto a second line.
+templates file - index.html
 
----
+### Routing 
 
-Happy coding!
+Allows us to switch between views using URLs
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+
+@app.route("/contact")
+def about():
+    return render_template("contact.html")
+
+2 lines between routes - pep8 compliant
+
+templates file - about.html, contact.html
+
+navigation links to work - use jinga templating method of url_for in order to call the appropriate functions.
+
+<li><a href = "{{ url_for('index') }}">Home</a></li>
+<li><a href = "{{ url_for('about') }}">About</a></li>
+<li><a href = "{{ url_for('contact') }}">Contact</a></li>
+
+### Template Inheritance 
+
+Allows us to inherit code from other templates reducing duplicate code 
+
+templates file - base.html 
+
+{% block content %}
+gets inserted here
+{% endblock %}
+
+in index.html file - 
+
+{% extends "base.html" %}
+{% block content %}
+    <h1>Home Page</h1>
+{% endblock %}
+
+### Using bootstrap theme 
+
+Start bootstrap - copy link address
+
+Command - mkdir static, cd static, wget(linkaddress), ls, unzip, cd - move all folders into static and delete the zip file.
+
+Inside head element link to css - 
+ <link rel="stylesheet" href="{{ url_for('static', filename='css/clean-blog.min.css') }}">
+
+Go to github repo for the bootstrap theme and copy and paste the head bootstrap css vendor file link into base template. 
+
+Copy and paste body element including scripts and update script links/image links with urls
+
+Change nav links to url_for
+
+
+
+
+
